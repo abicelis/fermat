@@ -20,8 +20,6 @@ import com.bitdubai.fermat_api.layer.osa_android.database_system.exceptions.Cant
 import com.bitdubai.fermat_api.layer.osa_android.database_system.exceptions.CantOpenDatabaseException;
 import com.bitdubai.fermat_api.layer.osa_android.database_system.exceptions.CantUpdateRecordException;
 import com.bitdubai.fermat_api.layer.osa_android.database_system.exceptions.DatabaseNotFoundException;
-import com.bitdubai.fermat_ccp_api.layer.basic_wallet.common.enums.BalanceType;
-import com.bitdubai.fermat_ccp_api.layer.basic_wallet.common.enums.TransactionType;
 import com.bitdubai.fermat_ccp_api.layer.crypto_transaction.outgoing_intra_actor.exceptions.OutgoingIntraActorCantGetCryptoStatusException;
 import com.bitdubai.fermat_ccp_plugin.layer.crypto_transaction.outgoing_intra_actor.developer.bitdubai.version_1.enums.TransactionState;
 import com.bitdubai.fermat_ccp_plugin.layer.crypto_transaction.outgoing_intra_actor.developer.bitdubai.version_1.exceptions.CantInitializeOutgoingIntraActorDaoException;
@@ -32,8 +30,8 @@ import com.bitdubai.fermat_ccp_plugin.layer.crypto_transaction.outgoing_intra_ac
 import com.bitdubai.fermat_ccp_plugin.layer.crypto_transaction.outgoing_intra_actor.developer.bitdubai.version_1.exceptions.OutgoingIntraActorCantSetTranactionHashException;
 import com.bitdubai.fermat_ccp_plugin.layer.crypto_transaction.outgoing_intra_actor.developer.bitdubai.version_1.exceptions.OutgoingIntraActorInconsistentTableStateException;
 import com.bitdubai.fermat_ccp_plugin.layer.crypto_transaction.outgoing_intra_actor.developer.bitdubai.version_1.util.OutgoingIntraActorTransactionWrapper;
-import com.bitdubai.fermat_pip_api.layer.platform_service.error_manager.enums.UnexpectedPluginExceptionSeverity;
-import com.bitdubai.fermat_pip_api.layer.platform_service.error_manager.interfaces.ErrorManager;
+import com.bitdubai.fermat_api.layer.all_definition.common.system.interfaces.error_manager.enums.UnexpectedPluginExceptionSeverity;
+import com.bitdubai.fermat_api.layer.all_definition.common.system.interfaces.ErrorManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,13 +90,16 @@ public class OutgoingIntraActorDao {
                                         Actors          deliveredToActorType,
                                         ReferenceWallet referenceWallet,
                                         boolean sameDevice,
-                                        BlockchainNetworkType blockchainNetworkType) throws OutgoingIntraActorCantInsertRecordException {
+                                        BlockchainNetworkType blockchainNetworkType,
+                                        CryptoCurrency cryptoCurrency) throws OutgoingIntraActorCantInsertRecordException {
         try {
             DatabaseTable       transactionTable = this.database.getTable(OutgoingIntraActorTransactionDatabaseConstants.OUTGOING_INTRA_ACTOR_TABLE_NAME);
           //check transaction Id not exist
             if(!isTransactionInTable(transactionId)) {
                 DatabaseTableRecord recordToInsert = transactionTable.getEmptyRecord();
-                loadRecordAsNew(recordToInsert, transactionId, requestId, walletPublicKey, destinationAddress, cryptoAmount, op_Return, notes, deliveredByActorPublicKey, deliveredByActorType, deliveredToActorPublicKey, deliveredToActorType, referenceWallet, sameDevice, blockchainNetworkType);
+                loadRecordAsNew(recordToInsert, transactionId, requestId, walletPublicKey, destinationAddress, cryptoAmount, op_Return, notes, deliveredByActorPublicKey, deliveredByActorType, deliveredToActorPublicKey, deliveredToActorType,
+                        referenceWallet, sameDevice, blockchainNetworkType,
+                        cryptoCurrency);
                 transactionTable.insertRecord(recordToInsert);
             }
         } catch (CantInsertRecordException e) {
@@ -218,7 +219,8 @@ public class OutgoingIntraActorDao {
                                  Actors              deliveredToActorType,
                                  ReferenceWallet referenceWallet,
                                  boolean sameDevice,
-                                 BlockchainNetworkType blockchainNetworkType) {
+                                 BlockchainNetworkType blockchainNetworkType,
+                                 CryptoCurrency cryptoCurrency) {
 
         UUID transactionId = trxId;
 
@@ -254,6 +256,7 @@ public class OutgoingIntraActorDao {
         databaseTableRecord.setStringValue(OutgoingIntraActorTransactionDatabaseConstants.OUTGOING_INTRA_ACTOR_SAME_DEVICE_COLUMN_NAME, String.valueOf(sameDevice));
         databaseTableRecord.setStringValue(OutgoingIntraActorTransactionDatabaseConstants.OUTGOING_INTRA_ACTOR_WALLET_REFERENCE_TYPE_COLUMN_NAME, referenceWallet.getCode());
         databaseTableRecord.setStringValue(OutgoingIntraActorTransactionDatabaseConstants.OUTGOING_INTRA_ACTOR_RUNNING_NETWORK_TYPE, blockchainNetworkType.getCode());
+        databaseTableRecord.setStringValue(OutgoingIntraActorTransactionDatabaseConstants.OUTGOING_INTRA_ACTOR_CRYPTO_CURRENCY_TYPE, cryptoCurrency.getCode());
 
     }
 
@@ -314,7 +317,7 @@ public class OutgoingIntraActorDao {
     }
     
     private OutgoingIntraActorTransactionWrapper convertToBT(DatabaseTableRecord record) throws InvalidParameterException {
-        OutgoingIntraActorTransactionWrapper bitcoinTransaction = new OutgoingIntraActorTransactionWrapper();
+        OutgoingIntraActorTransactionWrapper cryptoTransaction = new OutgoingIntraActorTransactionWrapper();
         boolean sameDevice = Boolean.valueOf(record.getStringValue(OutgoingIntraActorTransactionDatabaseConstants.OUTGOING_INTRA_ACTOR_SAME_DEVICE_COLUMN_NAME));
         String           walletPublicKey    = record.getStringValue(OutgoingIntraActorTransactionDatabaseConstants.OUTGOING_INTRA_ACTOR_WALLET_ID_TO_DEBIT_FROM_COLUMN_NAME);
         UUID             transactionId      = record.getUUIDValue(OutgoingIntraActorTransactionDatabaseConstants.OUTGOING_INTRA_ACTOR_TRANSACTION_ID_COLUMN_NAME);
@@ -350,30 +353,31 @@ public class OutgoingIntraActorDao {
                                                   );
 
         BlockchainNetworkType blockchainNetworkType = BlockchainNetworkType.getByCode(record.getStringValue(OutgoingIntraActorTransactionDatabaseConstants.OUTGOING_INTRA_ACTOR_RUNNING_NETWORK_TYPE));
+        CryptoCurrency cryptoCurrency = CryptoCurrency.getByCode(record.getStringValue(OutgoingIntraActorTransactionDatabaseConstants.OUTGOING_INTRA_ACTOR_CRYPTO_CURRENCY_TYPE));
+
+        cryptoTransaction.setWalletPublicKey(walletPublicKey);
+        cryptoTransaction.setIdTransaction(transactionId);
+        cryptoTransaction.setIdRequest(requestId);
+        cryptoTransaction.setTransactionHash(transactionHash);
+        cryptoTransaction.setAddressFrom(addressFrom);
+        cryptoTransaction.setAddressTo(addressTo);
+        cryptoTransaction.setAmount(amount);
+        cryptoTransaction.setOp_Return(op_Return);
+        cryptoTransaction.setState(state);
+        cryptoTransaction.setTimestamp(timestamp);
+        cryptoTransaction.setMemo(memo);
+        cryptoTransaction.setCryptoStatus(cryptoStatus);
+        cryptoTransaction.setActorFromPublicKey(actorFromPublicKey);
+        cryptoTransaction.setActorFromType(actorFromType);
+        cryptoTransaction.setActorToPublicKey(actorToPublicKey);
+        cryptoTransaction.setActorToType(actorToType);
+        cryptoTransaction.setReferenceWallet(referenceWallet);
+        cryptoTransaction.setSameDevice(sameDevice);
+        cryptoTransaction.setBlockchainNetworkType(blockchainNetworkType);
+        cryptoTransaction.setCryptoCurrency(cryptoCurrency);
 
 
-        bitcoinTransaction.setWalletPublicKey(walletPublicKey);
-        bitcoinTransaction.setIdTransaction(transactionId);
-        bitcoinTransaction.setIdRequest(requestId);
-        bitcoinTransaction.setTransactionHash(transactionHash);
-        bitcoinTransaction.setAddressFrom(addressFrom);
-        bitcoinTransaction.setAddressTo(addressTo);
-        bitcoinTransaction.setAmount(amount);
-        bitcoinTransaction.setOp_Return(op_Return);
-        bitcoinTransaction.setState(state);
-        bitcoinTransaction.setTimestamp(timestamp);
-        bitcoinTransaction.setMemo(memo);
-        bitcoinTransaction.setCryptoStatus(cryptoStatus);
-        bitcoinTransaction.setActorFromPublicKey(actorFromPublicKey);
-        bitcoinTransaction.setActorFromType(actorFromType);
-        bitcoinTransaction.setActorToPublicKey(actorToPublicKey);
-        bitcoinTransaction.setActorToType(actorToType);
-        bitcoinTransaction.setReferenceWallet(referenceWallet);
-        bitcoinTransaction.setSameDevice(sameDevice);
-        bitcoinTransaction.setBlockchainNetworkType(blockchainNetworkType);
-
-
-        return bitcoinTransaction;
+        return cryptoTransaction;
     }
 
     // Apply convertToBT to all the elements in a list

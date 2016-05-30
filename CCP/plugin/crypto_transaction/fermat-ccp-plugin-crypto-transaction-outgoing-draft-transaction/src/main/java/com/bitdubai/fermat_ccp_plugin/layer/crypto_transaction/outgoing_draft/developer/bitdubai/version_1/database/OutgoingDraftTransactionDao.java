@@ -27,8 +27,8 @@ import com.bitdubai.fermat_ccp_plugin.layer.crypto_transaction.outgoing_draft.de
 import com.bitdubai.fermat_ccp_plugin.layer.crypto_transaction.outgoing_draft.developer.bitdubai.version_1.exceptions.OutgoingIntraActorCantGetTransactionHashException;
 import com.bitdubai.fermat_ccp_plugin.layer.crypto_transaction.outgoing_draft.developer.bitdubai.version_1.exceptions.OutgoingIntraActorCantInsertRecordException;
 import com.bitdubai.fermat_ccp_plugin.layer.crypto_transaction.outgoing_draft.developer.bitdubai.version_1.util.OutgoingDraftTransactionWrapper;
-import com.bitdubai.fermat_pip_api.layer.platform_service.error_manager.enums.UnexpectedPluginExceptionSeverity;
-import com.bitdubai.fermat_pip_api.layer.platform_service.error_manager.interfaces.ErrorManager;
+import com.bitdubai.fermat_api.layer.all_definition.common.system.interfaces.error_manager.enums.UnexpectedPluginExceptionSeverity;
+import com.bitdubai.fermat_api.layer.all_definition.common.system.interfaces.ErrorManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -398,7 +398,11 @@ public class OutgoingDraftTransactionDao {
         }
         BlockchainNetworkType blockchainNetworkType = BlockchainNetworkType.getByCode(record.getStringValue(OutgoingDraftTransactionDatabaseConstants.OUTGOING_DRAFT_RUNNING_NETWORK_TYPE));
 
-        return new OutgoingDraftTransactionWrapper(transactionId, walletPublicKey, amount, cryptoAddressTo, referenceWallet, blockchainNetworkType, actorFromPublicKey, actorToPublicKey, actorFromType, actorToType, memo, timestamp, transactionHash);
+        CryptoCurrency cryptoCurrency = CryptoCurrency.getByCode(record.getStringValue(OutgoingDraftTransactionDatabaseConstants.OUTGOING_DRAFT_CRYPTO_CURRENCY_COLUMN_NAME));
+
+        return new OutgoingDraftTransactionWrapper(transactionId, walletPublicKey, amount, cryptoAddressTo, referenceWallet, blockchainNetworkType,
+                actorFromPublicKey, actorToPublicKey, actorFromType, actorToType, memo, timestamp, transactionHash,
+                cryptoCurrency);
     }
 
     // Apply convertToBT to all the elements in a list

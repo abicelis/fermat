@@ -8,7 +8,7 @@ import com.bitdubai.fermat_cbp_api.layer.negotiation.customer_broker_purchase.in
 import com.bitdubai.fermat_cbp_api.layer.network_service.transaction_transmission.interfaces.TransactionTransmissionManager;
 import com.bitdubai.fermat_cbp_plugin.layer.business_transaction.customer_online_payment.developer.bitdubai.version_1.database.CustomerOnlinePaymentBusinessTransactionDao;
 import com.bitdubai.fermat_cbp_plugin.layer.business_transaction.customer_online_payment.developer.bitdubai.version_1.structure.CustomerOnlinePaymentTransactionManager;
-import com.bitdubai.fermat_pip_api.layer.platform_service.error_manager.interfaces.ErrorManager;
+import com.bitdubai.fermat_api.layer.all_definition.common.system.interfaces.ErrorManager;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -45,7 +45,6 @@ public class sendPaymentTest {
         MockitoAnnotations.initMocks(this);
         customerOnlinePaymentTransactionManager = new CustomerOnlinePaymentTransactionManager(customerBrokerContractPurchaseManager,
                 customerOnlinePaymentBusinessTransactionDao,
-                transactionTransmissionManager,
                 customerBrokerPurchaseNegotiationManager,
                 errorManager);
         setUpGeneralMockitoRules();
@@ -61,24 +60,23 @@ public class sendPaymentTest {
 
     @Test
     public void sendPaymentTest_Should() throws Exception{
-        customerOnlinePaymentTransactionManager.sendPayment("walletPublicKey", "contractHash");
+        customerOnlinePaymentTransactionManager.sendPayment("walletPublicKey", "contractHash", paymentCurrency);
     }
 
     //This Test Catch ObjectNotSetException
     @Test(expected = CantSendPaymentException.class)
     public void sendPaymentTest_Should_() throws Exception{
 
-        customerOnlinePaymentTransactionManager.sendPayment(null, "contractHash");
+        customerOnlinePaymentTransactionManager.sendPayment(null, "contractHash", paymentCurrency);
     }
     //This Test Catch Generic Exception
     @Test(expected = CantSendPaymentException.class)
     public void sendPaymentTest_Should_Throw_CantSendPaymentException() throws Exception{
         customerOnlinePaymentTransactionManager = new CustomerOnlinePaymentTransactionManager(null,
                 customerOnlinePaymentBusinessTransactionDao,
-                transactionTransmissionManager,
                 customerBrokerPurchaseNegotiationManager,
                 errorManager);
-        customerOnlinePaymentTransactionManager.sendPayment("","");
+        customerOnlinePaymentTransactionManager.sendPayment("","", paymentCurrency);
     }
 
 }

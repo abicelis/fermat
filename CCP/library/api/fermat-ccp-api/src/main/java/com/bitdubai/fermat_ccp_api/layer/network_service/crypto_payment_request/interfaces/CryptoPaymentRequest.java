@@ -2,6 +2,7 @@ package com.bitdubai.fermat_ccp_api.layer.network_service.crypto_payment_request
 
 import com.bitdubai.fermat_api.layer.all_definition.enums.Actors;
 import com.bitdubai.fermat_api.layer.all_definition.enums.BlockchainNetworkType;
+import com.bitdubai.fermat_api.layer.all_definition.enums.CryptoCurrency;
 import com.bitdubai.fermat_api.layer.all_definition.enums.ReferenceWallet;
 import com.bitdubai.fermat_api.layer.all_definition.money.CryptoAddress;
 import com.bitdubai.fermat_ccp_api.layer.network_service.crypto_payment_request.enums.RequestAction;
@@ -36,7 +37,7 @@ public interface CryptoPaymentRequest {
 
     long                          getStartTimeStamp()   ;
 
-    RequestType getDirection()        ;
+    RequestType                   getDirection()        ;
 
     RequestAction                 getAction()           ;
 
@@ -49,5 +50,9 @@ public interface CryptoPaymentRequest {
     int                           getSentNumber()   ;
 
     String                        getMessageType();
+
+    String                        getWalletPublicKey();
+
+    CryptoCurrency                  getCryptoCurrency();
 
 }

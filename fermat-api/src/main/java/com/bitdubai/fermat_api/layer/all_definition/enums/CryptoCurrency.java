@@ -1,6 +1,5 @@
 package com.bitdubai.fermat_api.layer.all_definition.enums;
 
-import com.bitdubai.fermat_api.layer.all_definition.enums.interfaces.FermatEnum;
 import com.bitdubai.fermat_api.layer.all_definition.exceptions.InvalidParameterException;
 import com.bitdubai.fermat_api.layer.world.interfaces.Currency;
 
@@ -18,6 +17,7 @@ public enum CryptoCurrency implements Currency {
      * To make the code more readable, please keep the elements in the Enum sorted alphabetically.
      */
     BITCOIN     ("BTC", "Bitcoin"),
+    FERMAT     ("FRM", "Fermat"),
     DOGECOIN    ("DOGE", "Dogecoin"),
     ETHEREUM    ("ETH", "Ethereum"),
     LITECOIN    ("LTC", "Litecoin")
@@ -43,6 +43,7 @@ public enum CryptoCurrency implements Currency {
             case "DOGE": return CryptoCurrency.DOGECOIN;
             case "ETH": return CryptoCurrency.ETHEREUM;
             case "LTC": return CryptoCurrency.LITECOIN;
+            case "FRM": return CryptoCurrency.FERMAT;
             default:
                 throw new InvalidParameterException(
                         "Code Received: " + code,

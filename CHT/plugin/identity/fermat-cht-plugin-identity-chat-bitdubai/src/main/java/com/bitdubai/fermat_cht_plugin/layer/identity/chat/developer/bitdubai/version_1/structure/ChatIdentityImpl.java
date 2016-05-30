@@ -14,16 +14,17 @@ import com.bitdubai.fermat_api.layer.osa_android.file_system.PluginFileSystem;
 import com.bitdubai.fermat_api.layer.osa_android.file_system.exceptions.CantCreateFileException;
 import com.bitdubai.fermat_api.layer.osa_android.file_system.exceptions.CantPersistFileException;
 import com.bitdubai.fermat_cht_api.layer.identity.interfaces.ChatIdentity;
-import com.bitdubai.fermat_pip_api.layer.platform_service.error_manager.enums.UnexpectedPluginExceptionSeverity;
-import com.bitdubai.fermat_pip_api.layer.platform_service.error_manager.interfaces.ErrorManager;
+import com.bitdubai.fermat_api.layer.all_definition.common.system.interfaces.error_manager.enums.UnexpectedPluginExceptionSeverity;
+import com.bitdubai.fermat_api.layer.all_definition.common.system.interfaces.ErrorManager;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 /**
  * Created by franklin on 02/11/15.
  * Edited by Miguel Rincon on 19/04/2016
  */
-public class ChatIdentityImpl implements DealsWithPluginFileSystem, DealsWithPluginIdentity, ChatIdentity {
+public class ChatIdentityImpl implements ChatIdentity, Serializable {
     private static final String ASSET_ISSUER_PROFILE_IMAGE_FILE_NAME = "chatIdentityProfileImage";
     private static final String ASSET_ISSUER_PRIVATE_KEYS_FILE_NAME = "chatIdentityPrivateKey";
     private ErrorManager errorManager;
@@ -34,56 +35,59 @@ public class ChatIdentityImpl implements DealsWithPluginFileSystem, DealsWithPlu
     private String country;
     private String state;
     private String city;
+    private String connectionState;
 
-    /**
-     * DealsWithPluginFileSystem Interface member variables.
-     */
-    private PluginFileSystem pluginFileSystem;
+//    /**
+//     * DealsWithPluginFileSystem Interface member variables.
+//     */
+//    private PluginFileSystem pluginFileSystem;
+//
+//    /**
+//     * DealsWithPluginIdentity Interface member variables.
+//     */
+//    private UUID pluginId;
 
-    /**
-     * DealsWithPluginIdentity Interface member variables.
-     */
-    private UUID pluginId;
+//    /**
+//     * DealWithPluginFileSystem Interface implementation.
+//     */
+//    @Override
+//    public void setPluginFileSystem(PluginFileSystem pluginFileSystem) {
+//        this.pluginFileSystem = pluginFileSystem;
+//
+//    }
 
-    /**
-     * DealWithPluginFileSystem Interface implementation.
-     */
-    @Override
-    public void setPluginFileSystem(PluginFileSystem pluginFileSystem) {
-        this.pluginFileSystem = pluginFileSystem;
-
-    }
-
-    /**
-     * DealsWithPluginIdentity Interface implementation.
-     */
-    @Override
-    public void setPluginId(UUID pluginId) {
-        this.pluginId = pluginId;
-    }
+//    /**
+//     * DealsWithPluginIdentity Interface implementation.
+//     */
+//    @Override
+//    public void setPluginId(UUID pluginId) {
+//        this.pluginId = pluginId;
+//    }
 
     /**
      * Constructor
      */
-    public ChatIdentityImpl(String alias, String publicKey, String privateKey, byte[] profileImage, PluginFileSystem pluginFileSystem, UUID pluginId, String country, String state, String city) {
+    public ChatIdentityImpl(String alias, String publicKey, String privateKey, byte[] profileImage, String country, String state, String city, String connectionState) {
         this.alias = alias;
         this.publicKey = publicKey;
         this.profileImage = profileImage;
         this.privateKey = privateKey;
-        this.pluginFileSystem = pluginFileSystem;
-        this.pluginId = pluginId;
+//        this.pluginFileSystem = pluginFileSystem;
+//        this.pluginId = pluginId;
         this.country = country;
         this.state = state;
         this.city = city;
+        this.connectionState = connectionState;
     }
 
-    public ChatIdentityImpl(String alias, String publicKey, byte[] profileImage, String country, String state, String city) {
+    public ChatIdentityImpl(String alias, String publicKey, byte[] profileImage, String country, String state, String city, String connectionState) {
         this.alias = alias;
         this.publicKey = publicKey;
         this.profileImage = profileImage;
         this.country = country;
         this.state = state;
         this.city = city;
+        this.connectionState = connectionState;
     }
 
     public ChatIdentityImpl() {
@@ -112,33 +116,33 @@ public class ChatIdentityImpl implements DealsWithPluginFileSystem, DealsWithPlu
 
     @Override
     public void setNewProfileImage(byte[] newProfileImage) {
-        try {
-            PluginBinaryFile file = this.pluginFileSystem.createBinaryFile(pluginId,
-                    DeviceDirectory.LOCAL_USERS.getName(),
-                    ASSET_ISSUER_PROFILE_IMAGE_FILE_NAME + "_" + publicKey,
-                    FilePrivacy.PRIVATE,
-                    FileLifeSpan.PERMANENT
-            );
-
-            file.setContent(profileImage);
-
-
-            file.persistToMedia();
-        } catch (CantPersistFileException e) {
-            errorManager.reportUnexpectedPluginException(Plugins.CHAT_IDENTITY, UnexpectedPluginExceptionSeverity.DISABLES_SOME_FUNCTIONALITY_WITHIN_THIS_PLUGIN, FermatException.wrapException(e));
-        } catch (CantCreateFileException e) {
-            errorManager.reportUnexpectedPluginException(Plugins.CHAT_IDENTITY, UnexpectedPluginExceptionSeverity.DISABLES_SOME_FUNCTIONALITY_WITHIN_THIS_PLUGIN, FermatException.wrapException(e));
-        }
-        //TODO: Revisar este manejo de excepciones
-//        } catch (CantPersistFileException e) {
-//            throw new CantSetAssetIssuerIdentityProfileImagenException("CAN'T PERSIST PROFILE IMAGE ", e, "Error persist file.", null);
+//        try {
+//            PluginBinaryFile file = this.pluginFileSystem.createBinaryFile(pluginId,
+//                    DeviceDirectory.LOCAL_USERS.getName(),
+//                    ASSET_ISSUER_PROFILE_IMAGE_FILE_NAME + "_" + publicKey,
+//                    FilePrivacy.PRIVATE,
+//                    FileLifeSpan.PERMANENT
+//            );
 //
+//            file.setContent(profileImage);
+//
+//
+//            file.persistToMedia();
+//        } catch (CantPersistFileException e) {
+//            errorManager.reportUnexpectedPluginException(Plugins.CHAT_IDENTITY, UnexpectedPluginExceptionSeverity.DISABLES_SOME_FUNCTIONALITY_WITHIN_THIS_PLUGIN, FermatException.wrapException(e));
 //        } catch (CantCreateFileException e) {
-//            throw new CantSetAssetIssuerIdentityProfileImagenException("CAN'T PERSIST PROFILE IMAGE ", e, "Error creating file.", null);
-//        } catch (Exception e) {
-//            throw new CantSetAssetIssuerIdentityProfileImagenException("CAN'T PERSIST PROFILE IMAGE ", FermatException.wrapException(e), "", "");
+//            errorManager.reportUnexpectedPluginException(Plugins.CHAT_IDENTITY, UnexpectedPluginExceptionSeverity.DISABLES_SOME_FUNCTIONALITY_WITHIN_THIS_PLUGIN, FermatException.wrapException(e));
 //        }
-        this.profileImage = newProfileImage;
+//        //TODO: Revisar este manejo de excepciones
+////        } catch (CantPersistFileException e) {
+////            throw new CantSetAssetIssuerIdentityProfileImagenException("CAN'T PERSIST PROFILE IMAGE ", e, "Error persist file.", null);
+////
+////        } catch (CantCreateFileException e) {
+////            throw new CantSetAssetIssuerIdentityProfileImagenException("CAN'T PERSIST PROFILE IMAGE ", e, "Error creating file.", null);
+////        } catch (Exception e) {
+////            throw new CantSetAssetIssuerIdentityProfileImagenException("CAN'T PERSIST PROFILE IMAGE ", FermatException.wrapException(e), "", "");
+////        }
+//        this.profileImage = newProfileImage;
     }
 
     @Override
@@ -191,5 +195,15 @@ public class ChatIdentityImpl implements DealsWithPluginFileSystem, DealsWithPlu
     @Override
     public String getCity() {
         return this.city;
+    }
+
+    /**
+     * This method return String with ConnectionState
+     *
+     * @return the String
+     */
+    @Override
+    public String getConnectionState() {
+        return this.connectionState;
     }
 }

@@ -7,7 +7,7 @@ import com.bitdubai.fermat_cbp_api.layer.negotiation.customer_broker_purchase.in
 import com.bitdubai.fermat_cbp_api.layer.network_service.transaction_transmission.interfaces.TransactionTransmissionManager;
 import com.bitdubai.fermat_cbp_plugin.layer.business_transaction.customer_online_payment.developer.bitdubai.version_1.database.CustomerOnlinePaymentBusinessTransactionDao;
 import com.bitdubai.fermat_cbp_plugin.layer.business_transaction.customer_online_payment.developer.bitdubai.version_1.structure.CustomerOnlinePaymentTransactionManager;
-import com.bitdubai.fermat_pip_api.layer.platform_service.error_manager.interfaces.ErrorManager;
+import com.bitdubai.fermat_api.layer.all_definition.common.system.interfaces.ErrorManager;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -45,7 +45,6 @@ public class getContractTransactionStatusTest {
     public void getContractTransactionStatusTest_Should_Return_Not_Null() throws Exception{
         customerOnlinePaymentTransactionManager = new CustomerOnlinePaymentTransactionManager(customerBrokerContractPurchaseManager,
                 customerOnlinePaymentBusinessTransactionDao,
-                transactionTransmissionManager,
                 customerBrokerPurchaseNegotiationManager,
                 errorManager);
         assertEquals(ContractTransactionStatus.ACK_OFFLINE_PAYMENT,
@@ -57,7 +56,6 @@ public class getContractTransactionStatusTest {
         customerOnlinePaymentTransactionManager = new CustomerOnlinePaymentTransactionManager(
                 customerBrokerContractPurchaseManager,
                 customerOnlinePaymentBusinessTransactionDao,
-                transactionTransmissionManager,
                 customerBrokerPurchaseNegotiationManager,
                 errorManager);
         customerOnlinePaymentTransactionManager.getContractTransactionStatus(null);
@@ -66,7 +64,7 @@ public class getContractTransactionStatusTest {
     @Test(expected = UnexpectedResultReturnedFromDatabaseException.class)
     public void getContractTransactionStatusTest_Should_Throw_Generic_UnexpectedResultReturnedFromDatabaseException() throws Exception{
         customerOnlinePaymentTransactionManager = new CustomerOnlinePaymentTransactionManager(
-                null,null,null,null,errorManager);
+                null,null, null,errorManager);
         customerOnlinePaymentTransactionManager.getContractTransactionStatus("Test");
     }
 }

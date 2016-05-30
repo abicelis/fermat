@@ -8,7 +8,7 @@ import com.bitdubai.fermat_cbp_api.all_definition.enums.ContractTransactionStatu
 import com.bitdubai.fermat_cbp_api.all_definition.exceptions.UnexpectedResultReturnedFromDatabaseException;
 import com.bitdubai.fermat_cbp_plugin.layer.business_transaction.customer_online_payment.developer.bitdubai.version_1.database.CustomerOnlinePaymentBusinessTransactionDao;
 import com.bitdubai.fermat_cbp_plugin.layer.business_transaction.customer_online_payment.developer.bitdubai.version_1.database.CustomerOnlinePaymentBusinessTransactionDatabaseConstants;
-import com.bitdubai.fermat_pip_api.layer.platform_service.error_manager.interfaces.ErrorManager;
+import com.bitdubai.fermat_api.layer.all_definition.common.system.interfaces.ErrorManager;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -67,7 +67,7 @@ public class getOnBlockchainkCryptoStatusListTest {
         when(mockDatabase.getTable(CustomerOnlinePaymentBusinessTransactionDatabaseConstants.ONLINE_PAYMENT_TABLE_NAME)
         ).thenReturn(databaseTable);
         assertEquals(ContractTransactionStatus.PENDING_ONLINE_PAYMENT_CONFIRMATION,
-                customerOnlinePaymentBusinessTransactionDao.getOnBlockchainkCryptoStatusList().
+                customerOnlinePaymentBusinessTransactionDao.getOnBlockchainCryptoStatusList().
                         get(0).getContractTransactionStatus());
     }
     //Generic Exception
@@ -75,6 +75,6 @@ public class getOnBlockchainkCryptoStatusListTest {
     public void getOnBlockchainkCryptoStatusListTest_Should_Throw_Exception()throws Exception{
         customerOnlinePaymentBusinessTransactionDao = new CustomerOnlinePaymentBusinessTransactionDao(
                 mockPluginDatabaseSystem,testId,mockDatabase,errorManager);
-        customerOnlinePaymentBusinessTransactionDao.getOnBlockchainkCryptoStatusList();
+        customerOnlinePaymentBusinessTransactionDao.getOnBlockchainCryptoStatusList();
     }
 }

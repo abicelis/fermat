@@ -1,5 +1,7 @@
 package com.bitdubai.fermat_ccp_plugin.layer.network_service.crypto_payment_request.developer.bitdubai.version_1;
 
+import com.bitdubai.fermat_api.layer.all_definition.common.system.interfaces.ErrorManager;
+import com.bitdubai.fermat_api.layer.all_definition.common.system.interfaces.error_manager.enums.UnexpectedPluginExceptionSeverity;
 import com.bitdubai.fermat_api.layer.all_definition.common.system.utils.PluginVersionReference;
 import com.bitdubai.fermat_api.layer.all_definition.components.enums.PlatformComponentType;
 import com.bitdubai.fermat_api.layer.all_definition.components.interfaces.PlatformComponentProfile;
@@ -10,6 +12,10 @@ import com.bitdubai.fermat_api.layer.all_definition.developer.DeveloperDatabaseT
 import com.bitdubai.fermat_api.layer.all_definition.developer.DeveloperObjectFactory;
 import com.bitdubai.fermat_api.layer.all_definition.enums.Actors;
 import com.bitdubai.fermat_api.layer.all_definition.enums.BlockchainNetworkType;
+import com.bitdubai.fermat_api.layer.all_definition.enums.CryptoCurrency;
+import com.bitdubai.fermat_api.layer.all_definition.enums.Layers;
+import com.bitdubai.fermat_api.layer.all_definition.enums.Platforms;
+import com.bitdubai.fermat_api.layer.all_definition.enums.Plugins;
 import com.bitdubai.fermat_api.layer.all_definition.enums.ReferenceWallet;
 import com.bitdubai.fermat_api.layer.all_definition.events.EventSource;
 import com.bitdubai.fermat_api.layer.all_definition.events.interfaces.FermatEvent;
@@ -17,6 +23,7 @@ import com.bitdubai.fermat_api.layer.all_definition.exceptions.InvalidParameterE
 import com.bitdubai.fermat_api.layer.all_definition.money.CryptoAddress;
 import com.bitdubai.fermat_api.layer.all_definition.network_service.enums.NetworkServiceType;
 import com.bitdubai.fermat_api.layer.all_definition.util.Version;
+import com.bitdubai.fermat_api.layer.core.PluginInfo;
 import com.bitdubai.fermat_api.layer.osa_android.database_system.Database;
 import com.bitdubai.fermat_api.layer.osa_android.database_system.exceptions.CantCreateDatabaseException;
 import com.bitdubai.fermat_api.layer.osa_android.database_system.exceptions.CantOpenDatabaseException;
@@ -52,12 +59,9 @@ import com.bitdubai.fermat_ccp_plugin.layer.network_service.crypto_payment_reque
 import com.bitdubai.fermat_ccp_plugin.layer.network_service.crypto_payment_request.developer.bitdubai.version_1.messages.NetworkServiceMessage;
 import com.bitdubai.fermat_ccp_plugin.layer.network_service.crypto_payment_request.developer.bitdubai.version_1.messages.RequestMessage;
 import com.bitdubai.fermat_ccp_plugin.layer.network_service.crypto_payment_request.developer.bitdubai.version_1.structure.PaymentConstants;
-import com.bitdubai.fermat_p2p_api.layer.all_definition.common.network_services.template.exceptions.CantInitializeNetworkServiceDatabaseException;
 import com.bitdubai.fermat_p2p_api.layer.all_definition.communication.network_services.base.AbstractNetworkServiceBase;
 import com.bitdubai.fermat_p2p_api.layer.all_definition.communication.network_services.exceptions.CantSendMessageException;
 import com.bitdubai.fermat_p2p_api.layer.p2p_communication.commons.contents.FermatMessage;
-import com.bitdubai.fermat_pip_api.layer.platform_service.error_manager.enums.UnexpectedPluginExceptionSeverity;
-import com.bitdubai.fermat_pip_api.layer.platform_service.error_manager.interfaces.ErrorManager;
 import com.bitdubai.fermat_pip_api.layer.platform_service.event_manager.interfaces.EventManager;
 import com.google.gson.Gson;
 
@@ -72,6 +76,9 @@ import java.util.concurrent.Executors;
 /**
  * Created by Joaquin Carrasquero on 15/02/16,email: jc.juaco@gmail.com.
  */
+
+@PluginInfo(createdBy = "Joaquin Carrasquero", maintainerMail = "nattyco@gmail.com", platform = Platforms.CRYPTO_CURRENCY_PLATFORM, layer = Layers.NETWORK_SERVICE, plugin = Plugins.CRYPTO_PAYMENT_REQUEST)
+
 public class CryptoPaymentRequestNetworkServicePluginRootNew extends AbstractNetworkServiceBase implements
         CryptoPaymentRequestManager,
         DatabaseManagerForDevelopers {
@@ -138,7 +145,7 @@ public class CryptoPaymentRequestNetworkServicePluginRootNew extends AbstractNet
 
         try {
             initializeCommunicationDb();
-        } catch (CantInitializeNetworkServiceDatabaseException e) {
+        } catch (CantInitializeCryptoPaymentRequestNetworkServiceDatabaseException e) {
             e.printStackTrace();
         }
 
@@ -181,9 +188,9 @@ public class CryptoPaymentRequestNetworkServicePluginRootNew extends AbstractNet
     /**
      * This method initialize the database
      *
-     * @throws CantInitializeNetworkServiceDatabaseException
+     * @throws CantInitializeCryptoPaymentRequestNetworkServiceDatabaseException
      */
-    private void initializeCommunicationDb() throws CantInitializeNetworkServiceDatabaseException {
+    private void initializeCommunicationDb() throws CantInitializeCryptoPaymentRequestNetworkServiceDatabaseException {
 
         try {
 
@@ -192,7 +199,7 @@ public class CryptoPaymentRequestNetworkServicePluginRootNew extends AbstractNet
         } catch (CantOpenDatabaseException cantOpenDatabaseException) {
 
             errorManager.reportUnexpectedPluginException(this.getPluginVersionReference(), UnexpectedPluginExceptionSeverity.DISABLES_THIS_PLUGIN, cantOpenDatabaseException);
-            throw new CantInitializeNetworkServiceDatabaseException(cantOpenDatabaseException);
+            throw new CantInitializeCryptoPaymentRequestNetworkServiceDatabaseException(cantOpenDatabaseException);
 
         } catch (DatabaseNotFoundException e) {
 
@@ -205,7 +212,7 @@ public class CryptoPaymentRequestNetworkServicePluginRootNew extends AbstractNet
             } catch (CantCreateDatabaseException cantCreateDatabaseException) {
 
                 errorManager.reportUnexpectedPluginException(this.getPluginVersionReference(), UnexpectedPluginExceptionSeverity.DISABLES_SOME_FUNCTIONALITY_WITHIN_THIS_PLUGIN, cantCreateDatabaseException);
-                throw new CantInitializeNetworkServiceDatabaseException(cantCreateDatabaseException);
+                throw new CantInitializeCryptoPaymentRequestNetworkServiceDatabaseException(cantCreateDatabaseException);
 
             }
         }
@@ -316,7 +323,9 @@ public class CryptoPaymentRequestNetworkServicePluginRootNew extends AbstractNet
                     protocolState,
                     requestMessage.getNetworkType(),
                     requestMessage.getReferenceWallet(),
-                    0, PaymentConstants.OUTGOING_MESSAGE
+                    0, PaymentConstants.OUTGOING_MESSAGE,
+                    requestMessage.getWalletPublicKey(),
+                    requestMessage.getCryptoCurrency()
             );
 
         } catch(CantCreateCryptoPaymentRequestException e) {
@@ -584,7 +593,12 @@ public class CryptoPaymentRequestNetworkServicePluginRootNew extends AbstractNet
      * - Type          : SENT.
      */
     @Override
-    public void sendCryptoPaymentRequest(UUID requestId, String identityPublicKey, Actors identityType, String actorPublicKey, Actors actorType, CryptoAddress cryptoAddress, String description, long amount, long startTimeStamp, BlockchainNetworkType networkType, ReferenceWallet referenceWallet) throws CantSendRequestException {
+    public void sendCryptoPaymentRequest(UUID requestId, String identityPublicKey, Actors identityType, String actorPublicKey, Actors actorType,
+                                         CryptoAddress cryptoAddress, String description,
+                                         long amount, long startTimeStamp,
+                                         BlockchainNetworkType networkType,
+                                         ReferenceWallet referenceWallet, String walletPublicKey,
+                                         CryptoCurrency cryptoCurrency) throws CantSendRequestException {
 
         System.out.println("********** Crypto Payment Request NS -> sending request. PROCESSING_SEND - REQUEST - SENT.");
 
@@ -609,7 +623,9 @@ public class CryptoPaymentRequestNetworkServicePluginRootNew extends AbstractNet
                     protocolState,
                     networkType,
                     referenceWallet,
-                    0, PaymentConstants.OUTGOING_MESSAGE
+                    0, PaymentConstants.OUTGOING_MESSAGE,
+                    walletPublicKey,
+                    cryptoCurrency
             );
 
 
@@ -1053,9 +1069,9 @@ public class CryptoPaymentRequestNetworkServicePluginRootNew extends AbstractNet
                 cpr.getNetworkType(),
                 cpr.getReferenceWallet(),
                 cpr.getIdentityPublicKey(),
-                cpr.getActorPublicKey()
-
-        ).toJson();
+                cpr.getActorPublicKey(),
+                cpr.getWalletPublicKey(),
+                cpr.getCryptoCurrency()).toJson();
     }
 
     private void toWaitingResponse(final UUID requestId) throws CantChangeRequestProtocolStateException,

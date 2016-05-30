@@ -2,6 +2,7 @@ package com.bitdubai.fermat_ccp_plugin.layer.request.crypto_payment.developer.bi
 
 import com.bitdubai.fermat_api.layer.all_definition.enums.Actors;
 import com.bitdubai.fermat_api.layer.all_definition.enums.BlockchainNetworkType;
+import com.bitdubai.fermat_api.layer.all_definition.enums.CryptoCurrency;
 import com.bitdubai.fermat_api.layer.all_definition.enums.Plugins;
 import com.bitdubai.fermat_api.layer.all_definition.enums.ReferenceWallet;
 import com.bitdubai.fermat_api.layer.all_definition.money.CryptoAddress;
@@ -35,8 +36,8 @@ import com.bitdubai.fermat_ccp_plugin.layer.request.crypto_payment.developer.bit
 import com.bitdubai.fermat_ccp_plugin.layer.request.crypto_payment.developer.bitdubai.version_1.exceptions.CantExecuteUnfinishedActionsException;
 import com.bitdubai.fermat_ccp_plugin.layer.request.crypto_payment.developer.bitdubai.version_1.exceptions.CantInitializeCryptoPaymentRequestDatabaseException;
 import com.bitdubai.fermat_ccp_plugin.layer.request.crypto_payment.developer.bitdubai.version_1.exceptions.CantInitializeCryptoPaymentRequestRegistryException;
-import com.bitdubai.fermat_pip_api.layer.platform_service.error_manager.interfaces.ErrorManager;
-import com.bitdubai.fermat_pip_api.layer.platform_service.error_manager.enums.UnexpectedPluginExceptionSeverity;
+import com.bitdubai.fermat_api.layer.all_definition.common.system.interfaces.ErrorManager;
+import com.bitdubai.fermat_api.layer.all_definition.common.system.interfaces.error_manager.enums.UnexpectedPluginExceptionSeverity;
 
 import java.util.List;
 import java.util.UUID;
@@ -96,7 +97,9 @@ public class CryptoPaymentRequestRegistry implements CryptoPaymentRegistry {
                                              String                description      ,
                                              long                  amount           ,
                                              BlockchainNetworkType networkType      ,
-                                             ReferenceWallet       referenceWallet) throws CantGenerateCryptoPaymentRequestException {
+                                             ReferenceWallet       referenceWallet,
+                                             CryptoCurrency         cryptoCurrency
+                                             ) throws CantGenerateCryptoPaymentRequestException {
 
 
         System.out.println("********** Crypto Payment Request -> generating request. SENT - NOT_SENT_YET.");
@@ -133,7 +136,8 @@ public class CryptoPaymentRequestRegistry implements CryptoPaymentRegistry {
                     type,
                     state,
                     networkType,
-                    referenceWallet
+                    referenceWallet,
+                    cryptoCurrency
             );
 
             // if i can save it, i send it to the network service.
@@ -151,7 +155,9 @@ public class CryptoPaymentRequestRegistry implements CryptoPaymentRegistry {
                     amount,
                     startTimeStamp,
                     networkType,
-                    referenceWallet
+                    referenceWallet,
+                    walletPublicKey,
+                    cryptoCurrency
             );
 
             System.out.println("********** Crypto Payment Request -> generating request. SENT - WAITING RECEPTION CONFIRMATION -> OK.");
@@ -185,7 +191,9 @@ public class CryptoPaymentRequestRegistry implements CryptoPaymentRegistry {
                                                               long                  amount           ,
                                                               long                  startTimeStamp   ,
                                                               BlockchainNetworkType networkType,
-                                                              ReferenceWallet       referenceWallet) throws CantSendRequestException                     ,
+                                                              ReferenceWallet       referenceWallet,
+                                                              String walletPublicKey,
+                                                              CryptoCurrency cryptoCurrency) throws CantSendRequestException                     ,
                                                                                                               CantChangeCryptoPaymentRequestStateException ,
                                                                                                               CryptoPaymentRequestNotFoundException        {
 
@@ -202,7 +210,9 @@ public class CryptoPaymentRequestRegistry implements CryptoPaymentRegistry {
                 amount,
                 startTimeStamp,
                 networkType,
-                referenceWallet
+                referenceWallet,
+                walletPublicKey,
+                cryptoCurrency
         );
 
         // change the state to waiting reception confirmation
@@ -342,7 +352,8 @@ public class CryptoPaymentRequestRegistry implements CryptoPaymentRegistry {
                     cryptoPayment.getIdentityType(),
                     cryptoPayment.getActorType(),
                     cryptoPayment.getReferenceWallet(),
-                    cryptoPayment.getNetworkType()
+                    cryptoPayment.getNetworkType(),
+                    cryptoPayment.getCryptoCurrency()
             );
 
             cryptoPaymentRequestDao.changeState(
@@ -583,7 +594,9 @@ public class CryptoPaymentRequestRegistry implements CryptoPaymentRegistry {
                                     cryptoPayment.getAmount(),
                                     cryptoPayment.getStartTimeStamp(),
                                     cryptoPayment.getNetworkType(),
-                                    cryptoPayment.getReferenceWallet()
+                                    cryptoPayment.getReferenceWallet(),
+                                    cryptoPayment.getWalletPublicKey(),
+                                    cryptoPayment.getCryptoCurrency()
                             );
 
                         } catch(CantSendRequestException                     |

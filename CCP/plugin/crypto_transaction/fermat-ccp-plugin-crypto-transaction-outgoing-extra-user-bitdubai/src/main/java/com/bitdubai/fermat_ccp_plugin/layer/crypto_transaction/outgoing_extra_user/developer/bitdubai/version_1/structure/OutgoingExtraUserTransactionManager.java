@@ -3,11 +3,15 @@ package com.bitdubai.fermat_ccp_plugin.layer.crypto_transaction.outgoing_extra_u
 import com.bitdubai.fermat_api.FermatException;
 import com.bitdubai.fermat_api.layer.all_definition.enums.Actors;
 import com.bitdubai.fermat_api.layer.all_definition.enums.BlockchainNetworkType;
+import com.bitdubai.fermat_api.layer.all_definition.enums.CryptoCurrency;
 import com.bitdubai.fermat_api.layer.all_definition.enums.Plugins;
+import com.bitdubai.fermat_api.layer.all_definition.enums.ReferenceWallet;
 import com.bitdubai.fermat_api.layer.all_definition.money.CryptoAddress;
 import com.bitdubai.fermat_api.layer.dmp_module.wallet_manager.CantLoadWalletsException;
-import com.bitdubai.fermat_ccp_api.layer.basic_wallet.bitcoin_wallet.interfaces.BitcoinWalletWallet;
-import com.bitdubai.fermat_ccp_api.layer.basic_wallet.bitcoin_wallet.interfaces.BitcoinWalletManager;
+import com.bitdubai.fermat_ccp_api.layer.basic_wallet.crypto_wallet.interfaces.CryptoWalletWallet;
+import com.bitdubai.fermat_ccp_api.layer.basic_wallet.crypto_wallet.interfaces.CryptoWalletManager;
+import com.bitdubai.fermat_ccp_api.layer.basic_wallet.loss_protected_wallet.interfaces.BitcoinLossProtectedWallet;
+import com.bitdubai.fermat_ccp_api.layer.basic_wallet.loss_protected_wallet.interfaces.BitcoinLossProtectedWalletManager;
 import com.bitdubai.fermat_ccp_api.layer.crypto_transaction.outgoing_extra_user.TransactionManager;
 import com.bitdubai.fermat_ccp_api.layer.crypto_transaction.outgoing_extra_user.exceptions.CantSendFundsException;
 import com.bitdubai.fermat_ccp_api.layer.crypto_transaction.outgoing_extra_user.exceptions.InsufficientFundsException;
@@ -15,8 +19,8 @@ import com.bitdubai.fermat_ccp_api.layer.basic_wallet.common.enums.BalanceType;
 import com.bitdubai.fermat_ccp_api.layer.basic_wallet.common.exceptions.CantCalculateBalanceException;
 import com.bitdubai.fermat_api.layer.osa_android.database_system.PluginDatabaseSystem;
 import com.bitdubai.fermat_api.layer.osa_android.database_system.exceptions.CantInsertRecordException;
-import com.bitdubai.fermat_pip_api.layer.platform_service.error_manager.interfaces.ErrorManager;
-import com.bitdubai.fermat_pip_api.layer.platform_service.error_manager.enums.UnexpectedPluginExceptionSeverity;
+import com.bitdubai.fermat_api.layer.all_definition.common.system.interfaces.ErrorManager;
+import com.bitdubai.fermat_api.layer.all_definition.common.system.interfaces.error_manager.enums.UnexpectedPluginExceptionSeverity;
 import com.bitdubai.fermat_ccp_plugin.layer.crypto_transaction.outgoing_extra_user.developer.bitdubai.version_1.exceptions.CantInitializeDaoException;
 
 import java.util.UUID;
@@ -27,20 +31,23 @@ import java.util.UUID;
  */
 public class OutgoingExtraUserTransactionManager implements TransactionManager {
 
-    private final BitcoinWalletManager bitcoinWalletManager;
+    private final CryptoWalletManager cryptoWalletManager;
     private final ErrorManager         errorManager        ;
     private final PluginDatabaseSystem pluginDatabaseSystem;
     private final UUID                 pluginId            ;
+    private BitcoinLossProtectedWalletManager bitcoinLossProtectedWalletManager;
 
-    public OutgoingExtraUserTransactionManager(final BitcoinWalletManager bitcoinWalletManager,
+    public OutgoingExtraUserTransactionManager(final CryptoWalletManager cryptoWalletManager,
                                                final ErrorManager         errorManager        ,
                                                final PluginDatabaseSystem pluginDatabaseSystem,
-                                               final UUID                 pluginId            ) {
+                                               final UUID                 pluginId            ,
+                                               BitcoinLossProtectedWalletManager bitcoinLossProtectedWalletManager) {
 
-        this.bitcoinWalletManager = bitcoinWalletManager;
+        this.cryptoWalletManager = cryptoWalletManager;
         this.errorManager         = errorManager        ;
         this.pluginDatabaseSystem = pluginDatabaseSystem;
         this.pluginId             = pluginId            ;
+        this.bitcoinLossProtectedWalletManager = bitcoinLossProtectedWalletManager;
     }
 
     /*
@@ -55,7 +62,9 @@ public class OutgoingExtraUserTransactionManager implements TransactionManager {
                      final Actors        deliveredByActorType     ,
                      final String        deliveredToActorPublicKey,
                      final Actors        deliveredToActorType     ,
-                     BlockchainNetworkType blockchainNetworkType) throws InsufficientFundsException,
+                     ReferenceWallet referenceWallet,
+                     BlockchainNetworkType blockchainNetworkType,
+                     final CryptoCurrency cryptoCurrency) throws InsufficientFundsException,
                                                                            CantSendFundsException    {
         /*
          * TODO: Create a class fir tge selection of the correct wallet
@@ -66,11 +75,27 @@ public class OutgoingExtraUserTransactionManager implements TransactionManager {
          */
 
         OutgoingExtraUserDao dao = new OutgoingExtraUserDao(errorManager, pluginDatabaseSystem, pluginId);
-        long funds;
+        long funds = 0;
         try {
             dao.initialize();
-            BitcoinWalletWallet bitcoinWalletWallet = this.bitcoinWalletManager.loadWallet(walletPublicKey);
-            funds = bitcoinWalletWallet.getBalance(BalanceType.AVAILABLE).getBalance(blockchainNetworkType);
+            CryptoWalletWallet cryptoWalletWallet;
+            switch (referenceWallet) {
+                case BASIC_WALLET_BITCOIN_WALLET:
+                     cryptoWalletWallet = this.cryptoWalletManager.loadWallet(walletPublicKey);
+                    funds = cryptoWalletWallet.getBalance(BalanceType.AVAILABLE).getBalance(blockchainNetworkType);
+                    break;
+                case BASIC_WALLET_FERMAT_WALLET:
+                     cryptoWalletWallet = this.cryptoWalletManager.loadWallet(walletPublicKey);
+                    funds = cryptoWalletWallet.getBalance(BalanceType.AVAILABLE).getBalance(blockchainNetworkType);
+                    break;
+
+                case BASIC_WALLET_LOSS_PROTECTED_WALLET:
+                    BitcoinLossProtectedWallet lossProtectedWalletWallet = this.bitcoinLossProtectedWalletManager.loadWallet(walletPublicKey);
+                    funds = lossProtectedWalletWallet.getBalance(BalanceType.AVAILABLE).getBalance(blockchainNetworkType);
+                    break;
+            }
+
+
             if (cryptoAmount > funds) {
 
                 throw new InsufficientFundsException(
@@ -82,7 +107,9 @@ public class OutgoingExtraUserTransactionManager implements TransactionManager {
 
             } else {
 
-                dao.registerNewTransaction(walletPublicKey, destinationAddress, cryptoAmount, notes, deliveredByActorPublicKey, deliveredByActorType, deliveredToActorPublicKey, deliveredToActorType, blockchainNetworkType );
+                dao.registerNewTransaction(walletPublicKey, destinationAddress, cryptoAmount, notes, deliveredByActorPublicKey, deliveredByActorType, deliveredToActorPublicKey,
+                        deliveredToActorType, blockchainNetworkType,
+                        cryptoCurrency);
             }
         } catch (InsufficientFundsException exception) {
 
