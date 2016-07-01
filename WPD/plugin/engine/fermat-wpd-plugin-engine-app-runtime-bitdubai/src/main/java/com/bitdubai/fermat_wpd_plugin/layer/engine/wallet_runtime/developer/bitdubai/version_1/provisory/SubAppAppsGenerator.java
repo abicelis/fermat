@@ -25,6 +25,9 @@ import com.bitdubai.fermat_api.layer.all_definition.navigation_structure.option_
 import com.bitdubai.fermat_api.layer.all_definition.navigation_structure.option_menu.OptionMenuItem;
 import com.bitdubai.fermat_api.layer.all_definition.navigation_structure.option_menu.OptionMenuViewsAvailables;
 import com.bitdubai.fermat_api.layer.all_definition.navigation_structure.option_menu.OptionsMenu;
+import com.bitdubai.fermat_api.layer.all_definition.navigation_structure.option_menu.search_view.SearchMenuItem;
+import com.bitdubai.fermat_api.layer.all_definition.navigation_structure.option_menu.search_view.SearchViewOnPressEvent;
+import com.bitdubai.fermat_api.layer.all_definition.navigation_structure.tab_layout.TabBadgeView;
 import com.bitdubai.fermat_wpd_api.all_definition.AppNavigationStructure;
 
 import java.util.HashMap;
@@ -424,53 +427,22 @@ public class SubAppAppsGenerator {
 
             statusBar = new StatusBar();
             statusBar.setColor("#0072bb");
-
             runtimeActivity.setStatusBar(statusBar);
 
             runtimeTitleBar = new TitleBar();
-            runtimeTitleBar.setLabelSize(16);
+            runtimeTitleBar.setLabelSize(20);
             runtimeTitleBar.setTitleColor("#ffffff");
             runtimeTitleBar.setIsTitleTextStatic(true);
             runtimeTitleBar.setColor("#0072bb");
 
             runtimeActivity.setTitleBar(runtimeTitleBar);
 
-            //Menu
-
-
-            OptionsMenu optionsMenu = new OptionsMenu();
-            Owner owner = new Owner();
-            owner.setOwnerAppPublicKey(SubAppsPublicKeys.CCP_COMMUNITY.getCode());
-
-            //Help optionMenu
-            OptionMenuItem optionMenuItem = new OptionMenuItem(1);
-            optionMenuItem.setFermatDrawable(new FermatDrawable(3, "ic_search", owner, SourceLocation.DEVELOPER_RESOURCES));
-            optionMenuItem.setLabel("Search");
-            optionMenuItem.setShowAsAction(2);
-            optionsMenu.addMenuItem(optionMenuItem);
-
-            //Location optionMenu
-            optionMenuItem = new OptionMenuItem(2);
-            optionMenuItem.setFermatDrawable(new FermatDrawable(2, "ic_location", owner, SourceLocation.DEVELOPER_RESOURCES));
-            optionMenuItem.setLabel("Geolocation");
-            optionMenuItem.setShowAsAction(2);
-            optionsMenu.addMenuItem(optionMenuItem);
-
-            //Search optionMenu
-            optionMenuItem = new OptionMenuItem(3);
-            optionMenuItem.setFermatDrawable(new FermatDrawable(1, "ic_help", owner, SourceLocation.DEVELOPER_RESOURCES));
-            optionMenuItem.setLabel("Help");
-
-
-            optionMenuItem.setShowAsAction(2);
-            optionsMenu.addMenuItem(optionMenuItem);
-
 /*            runtimeOptionsMenu = new OptionsMenu();
             runtimeMenuItem = new MenuItem();
             runtimeMenuItem.setLabel("Settings");
-            runtimeOptionsMenu.addMenuItem(runtimeMenuItem);*/
+            runtimeOptionsMenu.addMenuItem(runtimeMenuItem);
 
-            runtimeActivity.setOptionsMenu(optionsMenu);
+            runtimeActivity.setOptionsMenu(runtimeOptionsMenu);*/
 
             runtimeFragment = new FermatRuntimeFragment();
             runtimeFragment.setFragmentCode(Fragments.CCP_SUB_APP_INTRA_USER_COMMUNITY_CONNECTION_WORLD_FRAGMENT.getKey());
@@ -482,7 +454,7 @@ public class SubAppAppsGenerator {
             runtimeSideMenu.setBackgroundColor("#0072bb");
 
             runtimeMenuItem = new MenuItem();
-            runtimeMenuItem.setLabel("Crypto wallet users");
+            runtimeMenuItem.setLabel("Cripto wallet users");
             runtimeMenuItem.setAppLinkPublicKey(communityPublicKey);
             runtimeMenuItem.setLinkToActivity(Activities.CCP_SUB_APP_INTRA_USER_COMMUNITY_CONNECTION_WORLD);
             runtimeSideMenu.addMenuItem(runtimeMenuItem);
@@ -537,7 +509,7 @@ public class SubAppAppsGenerator {
             runtimeSideMenu.setBackgroundColor("#0072bb");
 
             runtimeMenuItem = new MenuItem();
-            runtimeMenuItem.setLabel("Crypto wallet users");
+            runtimeMenuItem.setLabel("Cripto wallet users");
             runtimeMenuItem.setAppLinkPublicKey(communityPublicKey);
             runtimeMenuItem.setLinkToActivity(Activities.CCP_SUB_APP_INTRA_USER_COMMUNITY_CONNECTION_WORLD);
             runtimeSideMenu.addMenuItem(runtimeMenuItem);
@@ -629,7 +601,7 @@ public class SubAppAppsGenerator {
             runtimeTitleBar.setIsTitleTextStatic(true);
             runtimeTitleBar.setColor("#0072bb");
             runtimeTitleBar.setIconName("back");
-            runtimeTitleBar.setLabelSize(16);
+            runtimeTitleBar.setLabelSize(20);
             runtimeActivity.setTitleBar(runtimeTitleBar);
 
             statusBar = new StatusBar();
@@ -745,7 +717,7 @@ public class SubAppAppsGenerator {
             runtimeTitleBar = new TitleBar();
             runtimeTitleBar.setLabel("Artist Identity");
             runtimeTitleBar.setColor("#1189a4");
-            runtimeTitleBar.setTitleColor("#ffffff");
+            runtimeTitleBar.setTitleColor("#3A3A3A");
             runtimeTitleBar.setLabelSize(18);
             runtimeTitleBar.setIsTitleTextStatic(true);
             runtimeActivity.setTitleBar(runtimeTitleBar);
@@ -951,71 +923,6 @@ public class SubAppAppsGenerator {
             runtimeActivity.addFragment(Fragments.CCP_SUB_APP_CRYPTO_CUSTOMER_IDENTITY_CREATE_IDENTITY_FRAGMENT.getKey(), runtimeFragment);
             runtimeActivity.setStartFragment(Fragments.CCP_SUB_APP_CRYPTO_CUSTOMER_IDENTITY_CREATE_IDENTITY_FRAGMENT.getKey());
 
-            //Menu
-
-
-             optionsMenu = new OptionsMenu();
-             owner = new Owner();
-            owner.setOwnerAppPublicKey(SubAppsPublicKeys.CCP_IDENTITY.getCode());
-
-
-            //Search optionMenu
-            optionMenuItem = new OptionMenuItem(2);
-            optionMenuItem.setFermatDrawable(new FermatDrawable(2, "ic_location", owner, SourceLocation.DEVELOPER_RESOURCES));
-            optionMenuItem.setLabel("Geolocation");
-            optionMenuItem.setShowAsAction(2);
-            optionsMenu.addMenuItem(optionMenuItem);
-
-            //Help optionMenu
-            optionMenuItem = new OptionMenuItem(1);
-            optionMenuItem.setFermatDrawable(new FermatDrawable(1, "ic_help", owner, SourceLocation.DEVELOPER_RESOURCES));
-            optionMenuItem.setLabel("Help");
-            optionMenuItem.setShowAsAction(2);
-            optionsMenu.addMenuItem(optionMenuItem);
-
-
-            runtimeActivity.setOptionsMenu(optionsMenu);
-
-            // Activity: Create New Identity
-            runtimeActivity = new Activity();
-            runtimeActivity.setType(Activities.CCP_SUB_APP_INTRA_IDENTITY_GEOLOCATION_IDENTITY);
-            runtimeActivity.setActivityType(Activities.CCP_SUB_APP_INTRA_IDENTITY_GEOLOCATION_IDENTITY.getCode());
-            //runtimeActivity.setBackActivity(Activities.CCP_SUB_APP_INTRA_USER_IDENTITY);
-            runtimeActivity.setColor("#03A9F4");
-            runtimeSubApp.addActivity(runtimeActivity);
-
-            runtimeTitleBar = new TitleBar();
-            runtimeTitleBar.setLabel("Geolocation Settings");
-            runtimeTitleBar.setColor("#1189a4");
-            runtimeTitleBar.setTitleColor("#ffffff");
-            runtimeTitleBar.setLabelSize(18);
-            runtimeTitleBar.setIsTitleTextStatic(true);
-            runtimeActivity.setTitleBar(runtimeTitleBar);
-
-
-
-             optionsMenu = new OptionsMenu();
-             owner = new Owner();
-            owner.setOwnerAppPublicKey(SubAppsPublicKeys.CCP_IDENTITY.getCode());
-
-            //Help optionMenu
-             optionMenuItem = new OptionMenuItem(1);
-            optionMenuItem.setFermatDrawable(new FermatDrawable(1, "ic_help", owner, SourceLocation.DEVELOPER_RESOURCES));
-            optionMenuItem.setLabel("Help");
-            optionMenuItem.setShowAsAction(2);
-            optionsMenu.addMenuItem(optionMenuItem);
-            runtimeActivity.setOptionsMenu(optionsMenu);
-
-            statusBar = new StatusBar();
-            statusBar.setColor("#1189a4");
-            runtimeActivity.setStatusBar(statusBar);
-
-            runtimeFragment = new FermatRuntimeFragment();
-            runtimeFragment.setFragmentCode(Fragments.CCP_SUB_APP_INTRA_IDENTITY_GEOLOCATION_IDENTITY.getKey());
-            runtimeActivity.addFragment(Fragments.CCP_SUB_APP_INTRA_IDENTITY_GEOLOCATION_IDENTITY.getKey(), runtimeFragment);
-            runtimeActivity.setStartFragment(Fragments.CCP_SUB_APP_INTRA_IDENTITY_GEOLOCATION_IDENTITY.getKey());
-
-            runtimeSubApp.addActivity(runtimeActivity);
             listSubApp.put(runtimeSubApp.getPublicKey(), runtimeSubApp);
 
         } catch (Exception e) {
@@ -1414,14 +1321,15 @@ public class SubAppAppsGenerator {
 
         runtimeTitleBar = new TitleBar();
         runtimeTitleBar.setLabel("Redeem Point Identity");
-        runtimeTitleBar.setColor("#1189a4");
+        runtimeTitleBar.setIconName("back");
+        runtimeTitleBar.setColor("#009688");
         runtimeTitleBar.setTitleColor("#ffffff");
         runtimeTitleBar.setLabelSize(18);
         runtimeTitleBar.setIsTitleTextStatic(true);
         runtimeActivity.setTitleBar(runtimeTitleBar);
 
         statusBar = new StatusBar();
-        statusBar.setColor("#1189a4");
+        statusBar.setColor("#009688");
         runtimeActivity.setStatusBar(statusBar);
 
         runtimeFragment = new FermatRuntimeFragment();
@@ -1456,13 +1364,13 @@ public class SubAppAppsGenerator {
         //        runtimeActivity.setBackgroundColor("#F9F9F9");
 
         statusBar = new StatusBar();
-        statusBar.setColor("#1189a4");
+        statusBar.setColor("#009688");
         runtimeActivity.setStatusBar(statusBar);
 
         runtimeTitleBar = new TitleBar();
         runtimeTitleBar.setLabel("Geolocation");
         runtimeTitleBar.setIsTitleTextStatic(true);
-        runtimeTitleBar.setColor("#1189a4");
+        runtimeTitleBar.setColor("#009688");
         runtimeTitleBar.setTitleColor("#ffffff");
         runtimeTitleBar.setIconName("back");
         runtimeTitleBar.setLabelSize(18);
@@ -1575,7 +1483,7 @@ public class SubAppAppsGenerator {
         menuItem.setFermatDrawable(new FermatDrawable(1, "ic_search", owner, SourceLocation.DEVELOPER_RESOURCES));
         menuItem.setLabel("Search");
         menuItem.setShowAsAction(OptionMenuItem.SHOW_AS_ACTION_ALWAYS);//SHOW_AS_ACTION_ALWAYS (2) - SHOW_AS_ACTION_WITH_TEXT (4)
-        menuItem.setActionViewClass(100);
+        menuItem.setActionViewClass(OptionMenuViewsAvailables.SEARCH_VIEW);
         optionsMenu.addMenuItem(menuItem);
 
         menuItem = new OptionMenuItem(2);
@@ -1978,7 +1886,7 @@ public class SubAppAppsGenerator {
         menuItem.setFermatDrawable(new FermatDrawable(2, "ic_search", owner, SourceLocation.DEVELOPER_RESOURCES));
         menuItem.setLabel("Search");
         menuItem.setShowAsAction(OptionMenuItem.SHOW_AS_ACTION_ALWAYS);//SHOW_AS_ACTION_ALWAYS (2) - SHOW_AS_ACTION_WITH_TEXT (4)
-        menuItem.setActionViewClass(100);
+        menuItem.setActionViewClass(OptionMenuViewsAvailables.SEARCH_VIEW);
         optionsMenu.addMenuItem(menuItem);
 
         menuItem = new OptionMenuItem(7);
@@ -2332,7 +2240,7 @@ public class SubAppAppsGenerator {
         menuItemMain.setFermatDrawable(new FermatDrawable(2, "ic_search", owner, SourceLocation.DEVELOPER_RESOURCES));
         menuItemMain.setLabel("Search");
         menuItemMain.setShowAsAction(OptionMenuItem.SHOW_AS_ACTION_ALWAYS);//SHOW_AS_ACTION_ALWAYS (2) - SHOW_AS_ACTION_WITH_TEXT (4)
-        menuItemMain.setActionViewClass(100);
+        menuItemMain.setActionViewClass(OptionMenuViewsAvailables.SEARCH_VIEW);
         optionsMenuMain.addMenuItem(menuItemMain);
 
         menuItemMain = new OptionMenuItem(7);
@@ -2816,14 +2724,14 @@ public class SubAppAppsGenerator {
 //        menuItem.setFermatDrawable(new FermatDrawable(6, "ic_welcome_dialog", owner, SourceLocation.DEVELOPER_RESOURCES));
         menuItem.setLabel("Help");
         menuItem.setOrder(5);
-        menuItem.setShowAsAction(4);//SHOW_AS_ACTION_ALWAYS (2) - SHOW_AS_ACTION_WITH_TEXT (4)
+        menuItem.setShowAsAction(OptionMenuItem.SHOW_AS_ACTION_WITH_TEXT);//SHOW_AS_ACTION_ALWAYS (2) - SHOW_AS_ACTION_WITH_TEXT (4)
         optionsMenu.addMenuItem(menuItem);
 
         menuItem = new OptionMenuItem(7);
         menuItem.setFermatDrawable(new FermatDrawable(2, "ic_search", owner, SourceLocation.DEVELOPER_RESOURCES));
         menuItem.setLabel("Search");
         menuItem.setShowAsAction(OptionMenuItem.SHOW_AS_ACTION_ALWAYS);//SHOW_AS_ACTION_ALWAYS (2) - SHOW_AS_ACTION_WITH_TEXT (4)
-        menuItem.setActionViewClass(100);
+        menuItem.setActionViewClass(OptionMenuViewsAvailables.SEARCH_VIEW);
         optionsMenu.addMenuItem(menuItem);
 
         menuItem = new OptionMenuItem(7);
@@ -3030,7 +2938,7 @@ public class SubAppAppsGenerator {
 //        menuItem.setFermatDrawable(new FermatDrawable(1, "ic_welcome_dialog", owner, SourceLocation.DEVELOPER_RESOURCES));
         menuItem.setLabel("Help");
 //        menuItem.setOrder(5);
-        menuItem.setShowAsAction(4);//SHOW_AS_ACTION_ALWAYS (2) - SHOW_AS_ACTION_WITH_TEXT (4)
+        menuItem.setShowAsAction(OptionMenuItem.SHOW_AS_ACTION_WITH_TEXT);//SHOW_AS_ACTION_ALWAYS (2) - SHOW_AS_ACTION_WITH_TEXT (4)
         optionsMenu.addMenuItem(menuItem);
         runtimeActivity.setOptionsMenu(optionsMenu);
 
@@ -3903,8 +3811,8 @@ public class SubAppAppsGenerator {
         OptionMenuItem optionMenuItem = new OptionMenuItem(1);
         optionMenuItem.setFermatDrawable(new FermatDrawable(1, "search", owner, SourceLocation.DEVELOPER_RESOURCES));
         optionMenuItem.setLabel("Search");
-        optionMenuItem.setShowAsAction(2);
-        optionMenuItem.setActionViewClass(100);
+        optionMenuItem.setShowAsAction(OptionMenuItem.SHOW_AS_ACTION_ALWAYS);
+        optionMenuItem.setActionViewClass(OptionMenuViewsAvailables.SEARCH_VIEW);
         optionsMenu.addMenuItem(optionMenuItem);
 
         runtimeActivity.setOptionsMenu(optionsMenu);
@@ -4116,7 +4024,7 @@ public class SubAppAppsGenerator {
         runtimeTitleBar.setLabel("P2P Chat");
         runtimeTitleBar.setLabelSize(18);
         runtimeTitleBar.setTitleColor("#FFFFFF");
-        runtimeTitleBar.setIsTitleTextStatic(true);
+        runtimeTitleBar.setIsTitleTextStatic(false);
         runtimeTitleBar.setColor("#075E55");
         runtimeActivity.setTitleBar(runtimeTitleBar);
 
@@ -4148,35 +4056,40 @@ public class SubAppAppsGenerator {
         runtimeActivity.setStartFragment(Fragments.CHT_CHAT_OPEN_CHATLIST_TAB_FRAGMENT.getKey());
 
         OptionsMenu optionsMenu = new OptionsMenu();
-        OptionMenuItem optionMenuItem = new OptionMenuItem(1);
-        optionMenuItem.setFermatDrawable(new FermatDrawable(2, "search", owner, SourceLocation.DEVELOPER_RESOURCES));
-        optionMenuItem.setLabel("Search");
-        optionMenuItem.setShowAsAction(2);
-        optionMenuItem.setActionViewClass(100);
-        optionsMenu.addMenuItem(optionMenuItem);
+        SearchMenuItem searchOptionMenuItem = new SearchMenuItem(1);
+        searchOptionMenuItem.setFermatDrawable(new FermatDrawable(2, "search", owner, SourceLocation.DEVELOPER_RESOURCES));
+        searchOptionMenuItem.setLabel("Search");
+        searchOptionMenuItem.setShowAsAction(OptionMenuItem.SHOW_AS_ACTION_ALWAYS);
+        searchOptionMenuItem.setActionViewClass(OptionMenuViewsAvailables.SEARCH_VIEW);
 
-        optionMenuItem = new OptionMenuItem(2);
+        //search view focus event
+        SearchViewOnPressEvent esearchEvent = new SearchViewOnPressEvent();
+        esearchEvent.setIsToolbarTitleVisible(false);
+        searchOptionMenuItem.setOptionMenuPressEvent(esearchEvent);
+        optionsMenu.addMenuItem(searchOptionMenuItem);
+
+        OptionMenuItem optionMenuItem = new OptionMenuItem(2);
         //optionMenuItem.setFermatDrawable(new FermatDrawable(1, "delete_all_chats", owner, SourceLocation.DEVELOPER_RESOURCES));
         optionMenuItem.setLabel("Delete All Chats");
-        optionMenuItem.setShowAsAction(4);
+        optionMenuItem.setShowAsAction(OptionMenuItem.SHOW_AS_ACTION_WITH_TEXT);
         optionsMenu.addMenuItem(optionMenuItem);
 
         optionMenuItem = new OptionMenuItem(3);
         //optionMenuItem.setFermatDrawable(new FermatDrawable(1, "delete_all_chats", owner, SourceLocation.DEVELOPER_RESOURCES));
-        optionMenuItem.setLabel("Profile");
-        optionMenuItem.setShowAsAction(4);
+        optionMenuItem.setLabel("Go to Profile");
+        optionMenuItem.setShowAsAction(OptionMenuItem.SHOW_AS_ACTION_WITH_TEXT);
         optionsMenu.addMenuItem(optionMenuItem);
 
         optionMenuItem = new OptionMenuItem(4);
         //optionMenuItem.setFermatDrawable(new FermatDrawable(1, "delete_all_chats", owner, SourceLocation.DEVELOPER_RESOURCES));
-        optionMenuItem.setLabel("Community");
-        optionMenuItem.setShowAsAction(4);
+        optionMenuItem.setLabel("Go to Community");
+        optionMenuItem.setShowAsAction(OptionMenuItem.SHOW_AS_ACTION_WITH_TEXT);
         optionsMenu.addMenuItem(optionMenuItem);
 
         optionMenuItem = new OptionMenuItem(5);
         //optionMenuItem.setFermatDrawable(new FermatDrawable(1, "ic_welcome_dialog", owner, SourceLocation.DEVELOPER_RESOURCES));
         optionMenuItem.setLabel("Help");
-        optionMenuItem.setShowAsAction(4);
+        optionMenuItem.setShowAsAction(OptionMenuItem.SHOW_AS_ACTION_WITH_TEXT);
         optionsMenu.addMenuItem(optionMenuItem);
 
         runtimeFragment.setOptionsMenu(optionsMenu);
@@ -4194,30 +4107,35 @@ public class SubAppAppsGenerator {
         runtimeFragment.setFragmentCode(Fragments.CHT_CHAT_OPEN_CONTACTLIST_TAB_FRAGMENT.getKey());
         runtimeFragment.setOwner(owner);
 
+        //Badge Tab View
+        TabBadgeView tabBadgeView = new TabBadgeView(200,SourceLocation.FERMAT_FRAMEWORK);
+        tabBadgeView.setTitle("CONTACTS");
+        runtimeTab.setFermatView(tabBadgeView);
+
         optionsMenu = new OptionsMenu();
         optionMenuItem = new OptionMenuItem(1);
         optionMenuItem.setFermatDrawable(new FermatDrawable(2, "ic_search", owner, SourceLocation.DEVELOPER_RESOURCES));
         optionMenuItem.setLabel("Search");
-        optionMenuItem.setShowAsAction(2);
-        optionMenuItem.setActionViewClass(100);
+        optionMenuItem.setShowAsAction(OptionMenuItem.SHOW_AS_ACTION_ALWAYS);
+        optionMenuItem.setActionViewClass(OptionMenuViewsAvailables.SEARCH_VIEW);
         optionsMenu.addMenuItem(optionMenuItem);
 
         optionMenuItem = new OptionMenuItem(2);
         //optionMenuItem.setFermatDrawable(new FermatDrawable(1, "delete_all_chats", owner, SourceLocation.DEVELOPER_RESOURCES));
-        optionMenuItem.setLabel("Profile");
-        optionMenuItem.setShowAsAction(4);
+        optionMenuItem.setLabel("Go to Profile");
+        optionMenuItem.setShowAsAction(OptionMenuItem.SHOW_AS_ACTION_WITH_TEXT);
         optionsMenu.addMenuItem(optionMenuItem);
 
         optionMenuItem = new OptionMenuItem(3);
         //optionMenuItem.setFermatDrawable(new FermatDrawable(1, "delete_all_chats", owner, SourceLocation.DEVELOPER_RESOURCES));
-        optionMenuItem.setLabel("Community");
-        optionMenuItem.setShowAsAction(4);
+        optionMenuItem.setLabel("Go to Community");
+        optionMenuItem.setShowAsAction(OptionMenuItem.SHOW_AS_ACTION_WITH_TEXT);
         optionsMenu.addMenuItem(optionMenuItem);
 
         optionMenuItem = new OptionMenuItem(4);
         //optionMenuItem.setFermatDrawable(new FermatDrawable(1, "ic_welcome_dialog", owner, SourceLocation.DEVELOPER_RESOURCES));
         optionMenuItem.setLabel("Help");
-        optionMenuItem.setShowAsAction(4);
+        optionMenuItem.setShowAsAction(OptionMenuItem.SHOW_AS_ACTION_WITH_TEXT);
         optionsMenu.addMenuItem(optionMenuItem);
 
         runtimeFragment.setOptionsMenu(optionsMenu);
@@ -4482,13 +4400,13 @@ public class SubAppAppsGenerator {
         optionMenuItem = new OptionMenuItem(1);
         optionMenuItem.setFermatDrawable(new FermatDrawable(2, "ic_search", owner, SourceLocation.DEVELOPER_RESOURCES));
         optionMenuItem.setLabel("Search");
-        optionMenuItem.setShowAsAction(2);
-        optionMenuItem.setActionViewClass(100);
+        optionMenuItem.setShowAsAction(OptionMenuItem.SHOW_AS_ACTION_ALWAYS);
+        optionMenuItem.setActionViewClass(OptionMenuViewsAvailables.SEARCH_VIEW);
         optionsMenu.addMenuItem(optionMenuItem);
 
         optionMenuItem = new OptionMenuItem(2);
-        optionMenuItem.setLabel("Clean Chat");
-        optionMenuItem.setShowAsAction(4);
+        optionMenuItem.setLabel("Clear Chat");
+        optionMenuItem.setShowAsAction(OptionMenuItem.SHOW_AS_ACTION_WITH_TEXT);
         optionsMenu.addMenuItem(optionMenuItem);
 
         runtimeActivity.setOptionsMenu(optionsMenu);
@@ -4662,7 +4580,7 @@ public class SubAppAppsGenerator {
         runtimeTitleBar.setLabel("P2P Chat Community");
         runtimeTitleBar.setLabelSize(18);
         runtimeTitleBar.setTitleColor("#ffffff");
-        runtimeTitleBar.setIsTitleTextStatic(true);
+        runtimeTitleBar.setIsTitleTextStatic(false);
         runtimeTitleBar.setColor("#075E54");
         runtimeActivity.setTitleBar(runtimeTitleBar);
 
@@ -4699,20 +4617,20 @@ public class SubAppAppsGenerator {
         OptionMenuItem optionMenuItemBrowser = new OptionMenuItem(1);
         optionMenuItemBrowser.setFermatDrawable(new FermatDrawable(3, "ic_search", owner, SourceLocation.DEVELOPER_RESOURCES));
         optionMenuItemBrowser.setLabel("Search");
-        optionMenuItemBrowser.setShowAsAction(2);
-        optionMenuItemBrowser.setActionViewClass(100);
+        optionMenuItemBrowser.setShowAsAction(OptionMenuItem.SHOW_AS_ACTION_ALWAYS);
+        optionMenuItemBrowser.setActionViewClass(OptionMenuViewsAvailables.SEARCH_VIEW);
         optionsMenuBrowser.addMenuItem(optionMenuItemBrowser);
 
         optionMenuItemBrowser = new OptionMenuItem(2);
         optionMenuItemBrowser.setFermatDrawable(new FermatDrawable(2, "location", owner, SourceLocation.DEVELOPER_RESOURCES));
         optionMenuItemBrowser.setLabel("Location");
-        optionMenuItemBrowser.setShowAsAction(2);
+        optionMenuItemBrowser.setShowAsAction(OptionMenuItem.SHOW_AS_ACTION_ALWAYS);
         optionsMenuBrowser.addMenuItem(optionMenuItemBrowser);
 
         optionMenuItemBrowser = new OptionMenuItem(3);
         optionMenuItemBrowser.setFermatDrawable(new FermatDrawable(1, "ic_welcome_dialog", owner, SourceLocation.DEVELOPER_RESOURCES));
         optionMenuItemBrowser.setLabel("Help");
-        optionMenuItemBrowser.setShowAsAction(2);
+        optionMenuItemBrowser.setShowAsAction(OptionMenuItem.SHOW_AS_ACTION_ALWAYS);
         optionsMenuBrowser.addMenuItem(optionMenuItemBrowser);
 
         runtimeFragment.setOptionsMenu(optionsMenuBrowser);
@@ -4734,15 +4652,15 @@ public class SubAppAppsGenerator {
         OptionMenuItem optionMenuItemConn = new OptionMenuItem(1);
         optionMenuItemConn.setFermatDrawable(new FermatDrawable(3, "search", owner, SourceLocation.DEVELOPER_RESOURCES));
         optionMenuItemConn.setLabel("Search");
-        optionMenuItemConn.setActionViewClass(100);
-        optionMenuItemConn.setShowAsAction(2);
+        optionMenuItemConn.setActionViewClass(OptionMenuViewsAvailables.SEARCH_VIEW);
+        optionMenuItemConn.setShowAsAction(OptionMenuItem.SHOW_AS_ACTION_ALWAYS);
         optionsMenuConn.addMenuItem(optionMenuItemConn);
 
 
         optionMenuItemConn = new OptionMenuItem(2);
         optionMenuItemConn.setFermatDrawable(new FermatDrawable(1, "ic_welcome_dialog", owner, SourceLocation.DEVELOPER_RESOURCES));
         optionMenuItemConn.setLabel("Help");
-        optionMenuItemConn.setShowAsAction(4);
+        optionMenuItemConn.setShowAsAction(OptionMenuItem.SHOW_AS_ACTION_WITH_TEXT);
         optionsMenuConn.addMenuItem(optionMenuItemConn);
 
         runtimeFragment.setOptionsMenu(optionsMenuConn);
@@ -4764,7 +4682,7 @@ public class SubAppAppsGenerator {
         OptionMenuItem optionMenuItemNot = new OptionMenuItem(1);
         optionMenuItemNot.setFermatDrawable(new FermatDrawable(1, "ic_welcome_dialog", owner, SourceLocation.DEVELOPER_RESOURCES));
         optionMenuItemNot.setLabel("Help");
-        optionMenuItemNot.setShowAsAction(2);
+        optionMenuItemNot.setShowAsAction(OptionMenuItem.SHOW_AS_ACTION_ALWAYS);
         optionsMenuNot.addMenuItem(optionMenuItemNot);
 
         runtimeFragment.setOptionsMenu(optionsMenuNot);
@@ -4910,12 +4828,12 @@ public class SubAppAppsGenerator {
         OptionMenuItem menuItem = new OptionMenuItem(1);
         menuItem.setFermatDrawable(new FermatDrawable(2, "ic_location", owner2, SourceLocation.DEVELOPER_RESOURCES));
         menuItem.setLabel("Location");
-        menuItem.setShowAsAction(2);
+        menuItem.setShowAsAction(OptionMenuItem.SHOW_AS_ACTION_ALWAYS);
         optionsMenu.addMenuItem(menuItem);
 
         menuItem = new OptionMenuItem(2);
         menuItem.setFermatDrawable(new FermatDrawable(1, "ic_welcome_dialog", owner2, SourceLocation.DEVELOPER_RESOURCES));
-        menuItem.setShowAsAction(2);
+        menuItem.setShowAsAction(OptionMenuItem.SHOW_AS_ACTION_ALWAYS);
         menuItem.setLabel("Help");
         optionsMenu.addMenuItem(menuItem);
 
@@ -4968,6 +4886,9 @@ public class SubAppAppsGenerator {
         MenuItem runtimeMenuItem;
         StatusBar statusBar;
         Activity runtimeActivity;
+        //Fragment runtimeFragment;
+        String tabTitleColor = "#555759";
+        String tabBarColor="#E6E7E8";
         FermatRuntimeFragment runtimeFragment;
 
         AppNavigationStructure subAppFanCommunity = new AppNavigationStructure();
@@ -5012,15 +4933,15 @@ public class SubAppAppsGenerator {
         runtimeActivity.setColor("#FF0B46F0");
 
         statusBar = new StatusBar();
-        statusBar.setColor("#E6E7E8");
+        statusBar.setColor("#000000");
         runtimeActivity.setStatusBar(statusBar);
 
         runtimeTitleBar = new TitleBar();
         runtimeTitleBar.setLabel("Fan Users");
         runtimeTitleBar.setLabelSize(20);
-        runtimeTitleBar.setTitleColor("#6D6F71");
+        runtimeTitleBar.setTitleColor(tabTitleColor);
         runtimeTitleBar.setIsTitleTextStatic(true);
-        runtimeTitleBar.setColor("#E6E7E8");
+        runtimeTitleBar.setColor(tabBarColor);
         runtimeActivity.setTitleBar(runtimeTitleBar);
 
         runtimeFragment = new FermatRuntimeFragment();
@@ -5046,14 +4967,14 @@ public class SubAppAppsGenerator {
 
         runtimeTitleBar = new TitleBar();
         runtimeTitleBar.setLabel("Your Identities");
-        runtimeTitleBar.setTitleColor("#ffffff");
+        runtimeTitleBar.setTitleColor(tabTitleColor);
         runtimeTitleBar.setIsTitleTextStatic(true);
-        runtimeTitleBar.setColor("#0072bb");
+        runtimeTitleBar.setColor(tabBarColor);
         runtimeTitleBar.setLabelSize(20);
         runtimeActivity.setTitleBar(runtimeTitleBar);
 
         statusBar = new StatusBar();
-        statusBar.setColor("#0072bb");
+        statusBar.setColor("#E6E7E8");
         runtimeActivity.setStatusBar(statusBar);
 
         runtimeFragment = new FermatRuntimeFragment();
@@ -5078,9 +4999,9 @@ public class SubAppAppsGenerator {
 
         runtimeTitleBar = new TitleBar();
         runtimeTitleBar.setLabel("Connections");
-        runtimeTitleBar.setTitleColor("#6D6F71");
+        runtimeTitleBar.setTitleColor(tabTitleColor);
         runtimeTitleBar.setIsTitleTextStatic(true);
-        runtimeTitleBar.setColor("#E6E7E8");
+        runtimeTitleBar.setColor(tabBarColor);
         runtimeTitleBar.setLabelSize(20);
         runtimeActivity.setTitleBar(runtimeTitleBar);
 
@@ -5111,9 +5032,9 @@ public class SubAppAppsGenerator {
 
         runtimeTitleBar = new TitleBar();
         runtimeTitleBar.setLabel("Notifications");
-        runtimeTitleBar.setTitleColor("#6D6F71");
+        runtimeTitleBar.setTitleColor(tabTitleColor);
         runtimeTitleBar.setIsTitleTextStatic(true);
-        runtimeTitleBar.setColor("#E6E7E8");
+        runtimeTitleBar.setColor(tabBarColor);
         runtimeTitleBar.setLabelSize(20);
         runtimeActivity.setTitleBar(runtimeTitleBar);
 
@@ -5145,9 +5066,9 @@ public class SubAppAppsGenerator {
         runtimeTitleBar = new TitleBar();
         runtimeTitleBar.setLabel("Profile");
         runtimeTitleBar.setIconName("Back");
-        runtimeTitleBar.setTitleColor("#6D6F71");
+        runtimeTitleBar.setTitleColor(tabTitleColor);
         runtimeTitleBar.setIsTitleTextStatic(true);
-        runtimeTitleBar.setColor("#E6E7E8");
+        runtimeTitleBar.setColor(tabBarColor);
         runtimeTitleBar.setLabelSize(20);
         runtimeActivity.setTitleBar(runtimeTitleBar);
 
@@ -5180,7 +5101,7 @@ public class SubAppAppsGenerator {
 
         //Side Menu definition
         runtimeSideMenu = new SideMenu();
-        runtimeSideMenu.setBackgroundColor("#0072bb");
+        runtimeSideMenu.setBackgroundColor("#363636");
 
         runtimeMenuItem = new MenuItem();
         runtimeMenuItem.setLabel("Artist Users");
@@ -5216,13 +5137,13 @@ public class SubAppAppsGenerator {
         runtimeActivity.setColor("#FF0B46F0");
 
         statusBar = new StatusBar();
-        statusBar.setColor("#0072bb");
+        statusBar.setColor("#368CA8");
         runtimeActivity.setStatusBar(statusBar);
 
         runtimeTitleBar = new TitleBar();
         runtimeTitleBar.setLabel("Artist Users");
         runtimeTitleBar.setLabelSize(20);
-        runtimeTitleBar.setTitleColor("#ffffff");
+        runtimeTitleBar.setTitleColor("#000000");
         runtimeTitleBar.setIsTitleTextStatic(true);
         runtimeTitleBar.setColor("#0072bb");
         runtimeActivity.setTitleBar(runtimeTitleBar);
@@ -5245,19 +5166,19 @@ public class SubAppAppsGenerator {
         runtimeActivity.setColor("#FF0B46F0");
 
         statusBar = new StatusBar();
-        statusBar.setColor("#0072bb");
+        statusBar.setColor("#368CA8");
         runtimeActivity.setStatusBar(statusBar);
 
         runtimeTitleBar = new TitleBar();
         runtimeTitleBar.setLabel("Your Identities");
-        runtimeTitleBar.setTitleColor("#ffffff");
+        runtimeTitleBar.setTitleColor("#000000");
         runtimeTitleBar.setIsTitleTextStatic(true);
         runtimeTitleBar.setColor("#0072bb");
         runtimeTitleBar.setLabelSize(20);
         runtimeActivity.setTitleBar(runtimeTitleBar);
 
         statusBar = new StatusBar();
-        statusBar.setColor("#0072bb");
+        statusBar.setColor("#368CA8");
         runtimeActivity.setStatusBar(statusBar);
 
         runtimeFragment = new FermatRuntimeFragment();
@@ -5278,19 +5199,19 @@ public class SubAppAppsGenerator {
         runtimeActivity.setColor("#FF0B46F0");
 
         statusBar = new StatusBar();
-        statusBar.setColor("#0072bb");
+        statusBar.setColor("#368CA8");
         runtimeActivity.setStatusBar(statusBar);
 
         runtimeTitleBar = new TitleBar();
         runtimeTitleBar.setLabel("Connections");
-        runtimeTitleBar.setTitleColor("#ffffff");
+        runtimeTitleBar.setTitleColor("#000000");
         runtimeTitleBar.setIsTitleTextStatic(true);
         runtimeTitleBar.setColor("#0072bb");
         runtimeTitleBar.setLabelSize(20);
         runtimeActivity.setTitleBar(runtimeTitleBar);
 
         statusBar = new StatusBar();
-        statusBar.setColor("#0072bb");
+        statusBar.setColor("#368CA8");
         runtimeActivity.setStatusBar(statusBar);
 
         runtimeFragment = new FermatRuntimeFragment();
@@ -5311,19 +5232,19 @@ public class SubAppAppsGenerator {
         runtimeActivity.setColor("#FF0B46F0");
 
         statusBar = new StatusBar();
-        statusBar.setColor("#0072bb");
+        statusBar.setColor("#368CA8");
         runtimeActivity.setStatusBar(statusBar);
 
         runtimeTitleBar = new TitleBar();
         runtimeTitleBar.setLabel("Notifications");
-        runtimeTitleBar.setTitleColor("#ffffff");
+        runtimeTitleBar.setTitleColor("#000000");
         runtimeTitleBar.setIsTitleTextStatic(true);
         runtimeTitleBar.setColor("#0072bb");
         runtimeTitleBar.setLabelSize(20);
         runtimeActivity.setTitleBar(runtimeTitleBar);
 
         statusBar = new StatusBar();
-        statusBar.setColor("#0072bb");
+        statusBar.setColor("#368CA8");
         runtimeActivity.setStatusBar(statusBar);
 
         runtimeFragment = new FermatRuntimeFragment();
@@ -5344,20 +5265,20 @@ public class SubAppAppsGenerator {
         runtimeActivity.setColor("#FF0B46F0");
 
         statusBar = new StatusBar();
-        statusBar.setColor("#0072bb");
+        statusBar.setColor("#368CA8");
         runtimeActivity.setStatusBar(statusBar);
 
         runtimeTitleBar = new TitleBar();
         runtimeTitleBar.setLabel("Profile");
         runtimeTitleBar.setIconName("Back");
-        runtimeTitleBar.setTitleColor("#ffffff");
+        runtimeTitleBar.setTitleColor("#000000");
         runtimeTitleBar.setIsTitleTextStatic(true);
         runtimeTitleBar.setColor("#0072bb");
         runtimeTitleBar.setLabelSize(20);
         runtimeActivity.setTitleBar(runtimeTitleBar);
 
         statusBar = new StatusBar();
-        statusBar.setColor("#0072bb");
+        statusBar.setColor("#368CA8");
         runtimeActivity.setStatusBar(statusBar);
 
         runtimeFragment = new FermatRuntimeFragment();

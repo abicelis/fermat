@@ -9,11 +9,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.bitdubai.fermat_android_api.layer.definition.wallet.interfaces.ReferenceAppFermatSession;
@@ -100,7 +102,7 @@ public class ConnectionsTabFragment
 
         configureToolbar();
 
-        moduleManager.setAppPublicKey(appSession.getAppPublicKey());
+//        moduleManager.setAppPublicKey(appSession.getAppPublicKey());
 
         noContacts = (ImageView) rootView.findViewById(R.id.cbc_no_contacts);
     }
@@ -194,13 +196,46 @@ public class ConnectionsTabFragment
     }
 
     @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+        final MenuItem menuItem = menu.findItem(FragmentsCommons.SEARCH_FILTER_OPTION_MENU_ID);
+        final SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setQueryHint("Search here");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                List<CryptoBrokerCommunityInformation> filteredList = filterList(newText, connectedActorList);
+                adapter.changeDataSet(filteredList);
+                return true;
+            }
+        });
+    }
+
+    private List<CryptoBrokerCommunityInformation> filterList(String filterText, List<CryptoBrokerCommunityInformation> baseList) {
+        final ArrayList<CryptoBrokerCommunityInformation> filteredList = new ArrayList<>();
+        for (CryptoBrokerCommunityInformation item : baseList) {
+            if (item.getAlias().contains(filterText)) {
+                filteredList.add(item);
+            }
+        }
+
+        return filteredList;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case FragmentsCommons.HELP_OPTION_MENU_ID:
                 if (helpDialog == null)
                     helpDialog = new PresentationDialog.Builder(getActivity(), appSession)
                             .setTemplateType(PresentationDialog.TemplateType.TYPE_PRESENTATION_WITHOUT_IDENTITIES)
-                            .setBannerRes(R.drawable.banner_crypto_broker)
+                            .setBannerRes(R.drawable.cbc_banner)
                             .setIconRes(R.drawable.crypto_broker)
                             .setSubTitle(R.string.cbp_cbc_launch_action_creation_dialog_sub_title)
                             .setBody(R.string.cbp_cbc_launch_action_creation_dialog_body)
