@@ -24,4 +24,7 @@
     <string name="ccc_connection_state_connected">Is connected with you</string>
     <string name="ccc_connection_state_pending_acceptance">Pending request acceptance</string>
     <string name="ccc_no_data_available">No Locations Available</string>
+    <string name="select_an_identity">Select an identity</string>
+    <string name="cancel_button">cancel button</string>
+    <string name="accept_button">accept button</string>
 </resources>
